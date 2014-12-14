@@ -1,0 +1,26 @@
+.mb_20 {
+  margin-bottom: 20px !important;
+}
+
+.ptb_10 {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.w_100p {
+  width: 100% !important;
+}
+
+.qr-code {
+  margin: 0 auto;
+  width: 200px;
+  height: 200px;
+  background-color: #ccc;
+}
+
+.panel .table tbody tr td {
+  padding-left: 15px;
+}
+.panel .table tbody tr td label {
+  margin-bottom: 2px;
+}

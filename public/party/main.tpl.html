@@ -1,0 +1,198 @@
+<div class="container row ptb_10">
+  <button class="btn btn-default pull-right btn-sm">maintain</button>
+</div>
+<div class="jumbotron text-center">
+  <h1>
+    <span ng-if="!party._id">no bullshit, let's have a party</span>
+    <span ng-if="party._id">{{party.title}}</span>
+  </h1>
+</div>
+<div class="row" ng-if="!party._id">
+  <div class="col-sm-8 col-sm-offset-2 text-center">
+    <div class="form-group">
+      <input type="text" class="form-control input-lg text center"  ng-model="e.party" placeholder="input party title" typeahead="party as party.title for party in partyList | filter:{title:$viewValue}" typeahead-template-url="customTemplate.html">
+      <script type="text/ng-template" id="customTemplate.html">
+        <a>
+          <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+          <span>&nbsp;&nbsp;@&nbsp;&nbsp;</span>
+          <span bind-html-unsafe="match.model.meta.createAt"></span>
+        </a>
+      </script>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg" ng-click="oneMore()" ng-disabled="!e.party._id">new one</button>
+    <button type="button" class="btn btn-success btn-lg" ng-click="create()">create</button>
+  </div>
+</div>
+<pre><code>{{e | json}}</code></pre>
+
+<div ng-if="party._id">
+  <div class="row" ng-if="!party.isLaunched">
+    <div class="col-sm-4">
+      <div class="input-group mb_20">
+        <input type="text" class="form-control" placeholder="add member">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+        </span>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Member</div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>吴俊</td>
+              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+            <tr>
+              <td>承星</td>
+              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group mb_20">
+        <input type="text" class="form-control" placeholder="add shop">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+        </span>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">果麦</div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>
+                <label>
+                  <input type="checkbox" value="">
+                  <span>红豆抹茶拿铁</span>
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>
+                  <input type="checkbox" value="">
+                  <span>红豆抹茶拿铁</span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="mb_20">
+        <button class="btn btn-primary w_100p">launch</button>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Menu</div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>红豆抹茶拿铁</td>
+              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+            <tr>
+              <td>红豆抹茶拿铁</td>
+              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-if="!party.isLaunched">
+    <div class="col-sm-4">
+      <div class="input-group mb_20">
+        <input type="text" class="form-control" placeholder="forgot u?">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+        </span>
+      </div>
+      <accordion>
+        <accordion-group is-open="status.open">
+          <accordion-heading>吴俊</accordion-heading>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td class="col-sm-6">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="">
+                      <span>红豆抹茶拿铁</span>
+                    </label>
+                  </div>
+                </td>
+                <td class="col-sm-6">
+                  <div class="input-group input-group-sm mb_20">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+                    </span>
+                    <input type="text" class="form-control" placeholder="">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-sm-7">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="">
+                      <span>红豆燕麦奶茶</span>
+                    </label>
+                  </div>
+                </td>
+                <td class="col-sm-5">
+                  <div class="input-group input-group-sm mb_20">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+                    </span>
+                    <input type="text" class="form-control" placeholder="">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </accordion-group>
+      </accordion>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">果麦</div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>红豆抹茶拿铁</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>红豆抹茶拿铁</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">麦当劳</div>
+        <table class="table">
+          <tr>
+            <td>麦辣鸡翅</td>
+            <td>14</td>
+           </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="qr-code">
+      </div>
+      <p class="text-center">QR code</p>
+    </div>
+  </div>
+
+</div>
