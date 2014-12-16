@@ -1,5 +1,8 @@
-<div class="container row ptb_10">
-  <button class="btn btn-default pull-right btn-sm">maintain</button>
+<div class="container row ptb_10 h_50">
+  <div class="pull-right" ng-if="party.launched" >
+    <button class="btn btn-default btn-sm" ng-click="toggleMaintain()" ng-if="!e.maintaining">maintain</button>
+    <button class="btn btn-primary btn-sm" ng-click="toggleMaintain()" ng-if="e.maintaining" ng-disabled="!(party.menu | filter:{removed: '!true'}).length">go on</button>
+  </div>
 </div>
 <div class="jumbotron text-center">
   <h1>
@@ -19,172 +22,138 @@
         </a>
       </script>
     </div>
-    <button type="button" class="btn btn-primary btn-lg" ng-click="oneMore()" ng-disabled="!e.party._id">new one</button>
-    <button type="button" class="btn btn-success btn-lg" ng-click="create()">create</button>
+    <button type="button" class="btn btn-primary btn-lg" ng-click="oneMore()" ng-disabled="!e.party._id">one more time</button>
+    <button type="button" class="btn btn-success btn-lg" ng-click="create()">new one</button>
   </div>
 </div>
-<pre><code>{{e | json}}</code></pre>
+
 
 <div ng-if="party._id">
-  <div class="row" ng-if="!party.isLaunched">
+  <div class="row" ng-if="e.maintaining">
     <div class="col-sm-4">
       <div class="input-group mb_20">
-        <input type="text" class="form-control" placeholder="add member">
+        <input type="text" class="form-control" placeholder="add a member" ng-model="e.memberName" ng-keyup="handleMemberKeyup($event, e.memberName)">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+          <button class="btn btn-default" type="button" ng-click="addMember(e.memberName)"><span class="glyphicon glyphicon-plus"></span></button>
         </span>
       </div>
-      <div class="panel panel-default">
+      <div class="panel panel-default" ng-if="(party.members | filter: {removed: '!true'}).length">
         <div class="panel-heading">Member</div>
         <table class="table">
           <tbody>
-            <tr>
-              <td>吴俊</td>
-              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
-            </tr>
-            <tr>
-              <td>承星</td>
-              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            <tr ng-repeat="member in party.members | filter: {removed: '!true'}">
+              <td>{{member.name}}</td>
+              <td><a class="pull-right btn-remove" ng-click="removeMember(member)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="col-sm-4">
-      <div class="input-group mb_20">
-        <input type="text" class="form-control" placeholder="add shop">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-        </span>
+      <div class="form-group has-feedback mb_20">
+        <input type="text" class="form-control" placeholder="add saler" ng-model="e.saler" typeahead="saler as saler.name for saler in salerList | filter:{name:$viewValue}" typeahead-on-select="onSalerSelect($item)">
+        <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
       </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">果麦</div>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>
-                <label>
-                  <input type="checkbox" value="">
-                  <span>红豆抹茶拿铁</span>
-                </label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label>
-                  <input type="checkbox" value="">
-                  <span>红豆抹茶拿铁</span>
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="panel panel-default" ng-repeat="saler in salerList" ng-if="saler.menu.length">
+        <div class="panel-heading">
+          <button class="btn btn-link p_0" ng-click="toggleCollapsed(saler)">
+            <span class="glyphicon mr_5" ng-class="{'glyphicon glyphicon-folder-open': !saler.folded, 'glyphicon glyphicon-folder-close': saler.folded}"></span>
+            <span>{{saler.name}}</span>
+          </button>
+        </div>
+        <div collapse="saler.folded">
+          <table class="table">
+            <tbody>
+              <tr ng-repeat="item in saler.menu">
+                <td>
+                  <label>
+                    <a href="" class="btn btn-default btn-xs" ng-click="addToMenu(item)"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                    <span>{{item.name}}</span>
+                  </label>
+                </td>
+                <td>{{item.price | currency}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="col-sm-4">
       <div class="mb_20">
-        <button class="btn btn-primary w_100p">launch</button>
+        <button class="btn btn-primary" ng-click="launch()" ng-if="!party.launched" ng-disabled="!(party.menu | filter:{removed: '!true'}).length">launch</button>
+        <button class="btn btn-primary" ng-click="toggleMaintain()" ng-if="party.launched" ng-disabled="!(party.menu | filter:{removed: '!true'}).length">go on</button>
+        <label>
+          <input type="checkbox" ng-model="party.defaultAll" ng-change="handleDefaultAllChange()">为成员默认选中全部菜品
+        </label>
       </div>
-      <div class="panel panel-default">
+      <div class="panel panel-default" ng-if="(party.menu | filter:{removed: '!true'}).length">
         <div class="panel-heading">Menu</div>
         <table class="table">
           <tbody>
-            <tr>
-              <td>红豆抹茶拿铁</td>
-              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
-            </tr>
-            <tr>
-              <td>红豆抹茶拿铁</td>
-              <td><a class="btn btn-link btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+            <tr ng-repeat="item in party.menu | filter:{removed: '!true'}">
+              <td>{{item.menuitem.name}}</td>
+              <td><a class="pull-right btn-remove" ng-click="removeFromMenu(item)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <div class="row" ng-if="!party.isLaunched">
+  <div class="row" ng-if="!e.maintaining">
     <div class="col-sm-4">
       <div class="input-group mb_20">
-        <input type="text" class="form-control" placeholder="forgot u?">
+        <input type="text" class="form-control" ng-model="e.memberNameLaunched" placeholder="who r u?">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+          <button class="btn btn-default" ng-class="{'btn-primary': !(party.members | filter: {removed: '!true'} | filter: {name: e.memberNameLaunched}).length}" type="button" ng-click="addMember(e.memberNameLaunched)" ng-disabled="(party.members | filter: {removed: '!true'} | filter: {name: e.memberNameLaunched}).length">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
         </span>
       </div>
-      <accordion>
-        <accordion-group is-open="status.open">
-          <accordion-heading>吴俊</accordion-heading>
-          <table class="table">
-            <tbody>
-              <tr>
-                <td class="col-sm-6">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" value="">
-                      <span>红豆抹茶拿铁</span>
-                    </label>
-                  </div>
-                </td>
-                <td class="col-sm-6">
-                  <div class="input-group input-group-sm mb_20">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-                    </span>
-                    <input type="text" class="form-control" placeholder="">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="col-sm-7">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" value="">
-                      <span>红豆燕麦奶茶</span>
-                    </label>
-                  </div>
+      <div class="panel panel-default" ng-repeat="member in party.members | filter: {removed: '!true'} | filter: {name: e.memberNameLaunched}">
+        <div class="panel-heading">
+          <a class="pull-right" ng-click="sign(member)" ng-if="!member.signed">sign up</a>
+          <a class="pull-right" ng-click="updateOrder(member)" ng-if="member.signed && member.changed">update</a>
+          <button class="btn btn-link p_0" ng-click="toggleCollapsed(member)" ng-disabled="!member.signed">
+            <span class="glyphicon mr_5" ng-class="{'glyphicon glyphicon-folder-open': member.unfolded, 'glyphicon glyphicon-folder-close': !member.unfolded}"></span>
+            <span>{{member.name}}</span>
+          </button>
+        </div>
+        <div collapse="!member.unfolded">
+          <table class="table table-hover va_m mb_0">
+            <tbody class="va_m">
+              <tr ng-repeat="item in member.order">
+                <td>
+                  <button type="button" class="btn btn-link p_0" ng-click="increase(item, member)">
+                    <span class="glyphicon glyphicon-plus mr_5"></span>
+                    <span>{{item.menuitem.name}}</span>
+                  </button>
                 </td>
                 <td class="col-sm-5">
-                  <div class="input-group input-group-sm mb_20">
+                  <!-- <input type="number" class="form-control" ng-model="item.quantityEdit" min="0" ng-change="handleOrderChange(member)"> -->
+                  <div class="input-group input-group-sm">
+                    <input type="number" class="form-control" ng-model="item.quantityEdit" min="0" ng-change="handleOrderChange(member)">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-                    </span>
-                    <input type="text" class="form-control" placeholder="">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                      <button class="btn btn-default" type="button" ng-click="decrease(item, member)"><span class="glyphicon glyphicon-minus"></span></button>
+                      <button class="btn btn-default" type="button" ng-click="setEmpty(item, member)"><span class="glyphicon glyphicon-trash"></span></button>
                     </span>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
-        </accordion-group>
-      </accordion>
+        </div>
+      </div>
     </div>
     <div class="col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">果麦</div>
+      <div class="panel panel-default" ng-repeat="saler in salersView">
+        <div class="panel-heading">{{saler.name}}</div>
         <table class="table">
           <tbody>
-            <tr>
-              <td>红豆抹茶拿铁</td>
-              <td>12</td>
-            </tr>
-            <tr>
-              <td>红豆抹茶拿铁</td>
-              <td>2</td>
+            <tr ng-repeat="item in saler.menu">
+              <td>{{item.menuitem.name}}</td>
+              <td class="text-right">{{item.total}}</td>
             </tr>
           </tbody>
-        </table>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">麦当劳</div>
-        <table class="table">
-          <tr>
-            <td>麦辣鸡翅</td>
-            <td>14</td>
-           </tr>
         </table>
       </div>
     </div>
@@ -194,5 +163,5 @@
       <p class="text-center">QR code</p>
     </div>
   </div>
-
 </div>
+<!-- <pre><code>{{party | json}}</code></pre> -->

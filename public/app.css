@@ -1,7 +1,20 @@
+.h_50 {
+  height: 50px !important;
+}
+.p_0 {
+  padding: 0 !important;
+}
+
+.mb_0 {
+  margin-bottom: 0 !important;
+}
+
 .mb_20 {
   margin-bottom: 20px !important;
 }
-
+.mr_5 {
+  margin-right: 5px !important;
+}
 .ptb_10 {
   padding-top: 10px !important;
   padding-bottom: 10px !important;
@@ -20,7 +33,25 @@
 
 .panel .table tbody tr td {
   padding-left: 15px;
+  padding-right: 15px;
 }
 .panel .table tbody tr td label {
   margin-bottom: 2px;
 }
+
+.va_m,
+.va_m tr td,
+.va_m tr th {
+  vertical-align: middle !important;
+}
+
+a {
+  cursor: pointer;
+}
+
+.btn-link:hover, .btn-link:active, .btn-link:focus {
+  text-decoration: none;
+}
+
+.btn-remove { color: #ccc; /*padding-left: 0; padding-right: 5px; line-height: 1; width: 20px; */}
+.btn-remove:hover { color: #d9534f; }
