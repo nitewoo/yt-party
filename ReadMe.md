@@ -1,0 +1,2 @@
+`node init_scripts/init.js` to init db with init_scripts/shops.json file.
+!! important : backup, because the init script will delete `Menuitem` and `Saler` collections, notice that `Party` will not be affected
