@@ -21,6 +21,11 @@ app.use(methodOverride());
 var routes = require('./app/routes');
 routes(app);
 
-app.listen(port);
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+require('./app/socket/socket')(io);
+
+
+server.listen(port);
 console.log('App listening on port ' + port);
 

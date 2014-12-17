@@ -5,7 +5,8 @@ angular.module('partyController', []).controller('CtrlParty', [
   '$location',
   'Party',
   'Saler',
-function ($scope, $stateParams, $location, Party, Saler) {
+  'io',
+function ($scope, $stateParams, $location, Party, Saler, io) {
   $scope.e = {
     party: ''
   };
@@ -164,7 +165,15 @@ function ($scope, $stateParams, $location, Party, Saler) {
     console.log(item.unfolded);
   };
 
+  io.on('add menuitem', function (data) {
+    doSth(data);
+  })
+  function doSth (data) {
+    console.log('do sth', data);
+  }
   $scope.updateOrder = function (member) {
+    io.emit('add menuitem', 1);
+    doSth(1);
     Party.updateOrder({
       id: $scope.party._id,
       memberName: member.name,
