@@ -31,5 +31,25 @@ define(['app'], function (app) {
       }
     });
 
+    $stateProvider.state('demo', {
+      url: '/demo?id', // root route
+      views: {
+        'body': {
+          controller: 'CtrlDemo', // This view will use AppCtrl loaded below in the resolve
+          templateUrl: 'demo/demo.tpl.html'
+        }
+      },
+      resolve: { // Any property in resolve should return a promise and is executed before the view is loaded
+        loadModule: ['$ocLazyLoad', function($ocLazyLoad) {
+          // you can lazy load files for an existing module
+          return $ocLazyLoad.load({
+            name: 'demo',
+            files: ['demo/demo.js']
+          });
+        }]
+      }
+    });
+
+
   }]);
 });

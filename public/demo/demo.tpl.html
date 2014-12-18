@@ -1,0 +1,8 @@
+<div>
+  <input type="text" ng-model="query">
+  
+  <div ng-repeat="user in users | filter:filterFn" class="box {{user.boxColorIndex}}">
+    <h1>I am {{user.name}}.</h1>
+    <p>{{user.tokens | json}}</p>
+  </div>
+</div>

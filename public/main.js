@@ -17,7 +17,7 @@ require.config({
 });
 
 // kick start
-require(['app', 'routes'], function (app) {
+require(['app', 'routes', 'searcher'], function (app) {
   angular.element(document).ready(function () {
     angular.bootstrap(document.body, [app['name'], function () {
       // for good measure, put ng-app on the html element

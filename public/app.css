@@ -55,3 +55,18 @@ a {
 
 .btn-remove { color: #ccc; /*padding-left: 0; padding-right: 5px; line-height: 1; width: 20px; */}
 .btn-remove:hover { color: #d9534f; }
+
+.box{float: left;width: 33.3%;height: 200px;/*border: 1px dashed #fff;*/color: #fff;}
+.box-color1{background-color: #9554D2}
+.box-color2{background-color: #00B19E}
+.box-color3{background-color: #FF5050}
+.box-color4{background-color: #FF70D2}
+.box-color5{background-color: #89D011}
+.box-color6{background-color: #FAD300}
+.box-color7{background-color: #FFA273}
+.box-color8{background-color: #5493E3}
+.box-color9{background-color: #BDE3FF}
+   
+      /*58dc00 287b00 a8f07a 4ae8c4
+      3b88eb 3824aa a700ff '#d300e7'
+*/
