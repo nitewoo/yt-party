@@ -13,6 +13,15 @@ define([], function () {
       getMenuitems: function (salerId) {
         var url = '/api/menu/' + salerId;
         return $http.get(url);
+      },
+      saveMenuitem: function (menuitem) {
+        var url = '/api/menu';
+        if (menuitem._id) {
+          url = url + '/' + menuitem._id;
+        }
+        var data = angular.toJson(menuitem);
+        delete data._id;
+        return $http.post(url, data);
       }
     };
   }]);

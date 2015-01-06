@@ -18,12 +18,13 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json'}));  // parse application/vnd.api+json as json
 app.use(methodOverride());
 
-var routes = require('./app/routes');
-routes(app);
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 require('./app/socket/socket')(io);
+
+var routes = require('./app/routes');
+routes(app, io);
 
 
 server.listen(port);

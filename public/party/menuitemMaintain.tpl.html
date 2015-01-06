@@ -1,0 +1,74 @@
+<div class="modal-header">
+  <h4>
+    <span>菜品维护</span>
+  </h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" name="formMenuitem" novalidate>
+    <div class="form-group">
+      <label class="col-md-2 control-label">菜品名称</label>
+      <div class="col-md-6"  ng-class="{'has-error': formMenuitem.menuitemName.$dirty && formMenuitem.menuitemName.$invalid}">
+        <input type="text" class="form-control" name="menuitemName" ng-model="menuitem.name" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">价格</label>
+      <div class="col-md-6"  ng-class="{'has-error': formMenuitem.menuitemPrice.$dirty && formMenuitem.menuitemPrice.$invalid}">
+        <input type="number" class="form-control" name="menuitemPrice" ng-model="menuitem.price" min="0.01" step="0.01">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">选项组</label>
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="e.groupName">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default" tooltip="即菜品的必选项组" tooltip-append-to-body="true" ng-click="addGroup('required')">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span>规格</span>
+            </button>
+            <button type="button" class="btn btn-default" tooltip="即菜品的可选项组" tooltip-append-to-body="true" ng-click="addGroup()">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span>偏好</span>
+            </button>
+            <button type="button" class="btn btn-default" tooltip="即菜品的多选项组" tooltip-append-to-body="true" ng-click="addGroup('multiple')">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span>加料</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group" ng-repeat="group in menuitem.optGroups">
+      <label class="col-md-2 control-label">
+        <a class="btn-remove" tooltip="移除该组" ng-click="removeGroup($index)"><span class="glyphicon glyphicon-trash"></span></a>
+        <span ng-if="group.required">规格</span>
+        <span ng-if="!group.required">偏好</span>
+        <span>-</span>
+        <span>{{group.name}}</span>
+      </label>
+      <div class="col-md-3">
+        <div class="input-group">
+        <!-- <span class="input-group-addon">糖</span> -->
+          <input type="text" class="form-control" ng-model="group.optName" ng-keyup="handleOptNameKeyup($event, group)">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="addOpt(group)">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span>选项</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7 p_0" ng-if="group.opts">
+        <h4 class="mt_5 mb_0">
+          <span class="label label-primary label-option" tooltip="移除该选项"  ng-repeat="opt in group.opts" ng-click="removeOpt(group, $index)">{{opt}}</span>
+        </h4>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <!-- <button class="btn btn-danger pull-left" ng-click="remove()" ng-if="menuitem._id">删除此菜品</button> -->
+  <button class="btn btn-primary" ng-click="submit()" ng-disabled="formMenuitem.$invalid">确定</button>
+  <button class="btn btn-default" ng-click="cancel()">取消</button>
+</div>

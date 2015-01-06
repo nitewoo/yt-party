@@ -6,7 +6,7 @@ var Menuitem = require('../app/models/Menuitem');
 var _ = require('underscore');
 var ObjectId = mongoose.Types.ObjectId;
 
-var databaseUrl = 'mongodb://localhost/mydb';
+var databaseUrl = 'mongodb://localhost/party';
 mongoose.connect(databaseUrl);
 
 //clear all salers exist
@@ -21,6 +21,12 @@ Menuitem.find({}, function (err, docs) {
     doc.remove()
   })
 });
+//clear all party exist
+Party.find({}, function (err, docs) {
+  _.each(docs, function (doc) {
+    doc.remove()
+  })
+});
 
 // var salers = [
 //   {
@@ -30,7 +36,7 @@ Menuitem.find({}, function (err, docs) {
 // ];
 
 var fs = require('fs');
-fs.readFile('init_scripts/shops.json', 'utf8', function(err, data){          
+fs.readFile('init_scripts/shops.json', 'utf8', function(err, data){
 
     if (err) {
         console.log(err)

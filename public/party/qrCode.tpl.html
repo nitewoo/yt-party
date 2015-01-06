@@ -1,0 +1,8 @@
+<div class="is-fixed">
+  <div class="pop-dialog has-transitions" ng-class="{'is-visible': pop.isOpen}">
+  <qr class="qr-code" type-number="5" correction-level="'M'" size="200" text="pop.url" image="true"></div>
+  </qr>
+  <a class="btn btn-warning btn-lg pop-dialog-trigger" ng-class="{'menu-is-open': pop.isOpen}" ng-click="togglePop()" tooltip="我要跑腿 -_-|||" tooltip-placement="left">
+    <span class="glyphicon" ng-class="{'glyphicon-qrcode': !pop.isOpen, 'glyphicon-remove': pop.isOpen}"></span>
+  </a>
+</div>

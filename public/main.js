@@ -1,18 +1,27 @@
 require.config({
   baseUrl: '.',
   paths: {
-    'angular': 'vendor/angular-1.2.27/angular',
+    'angular': 'vendor/angular/angular',
     'ocLazyLoad': 'vendor/ocLazyLoad/dist/ocLazyLoad',
     'angular-ui-router': 'vendor/ui-router/release/angular-ui-router',
-    'ui-bootstrap': 'vendor/ui-bootstrap/ui-bootstrap-tpls-0.12.0'
+    'ui-bootstrap': 'vendor/angular-bootstrap/ui-bootstrap-tpls',
+    'angular-animate': 'vendor/angular-animate/angular-animate',
+    'lodash': 'vendor/lodash/dist/lodash',
+    'qrcode': 'vendor/angular-qr/lib/qrcode',
+    'angular-qr': 'vendor/angular-qr/src/angular-qr',
   },
   shim: {
     'angular': {
       exports: 'angular',
     },
+    'lodash': {
+      exports: '_',
+    },
     'angular-ui-router': ['angular'],
+    'angular-animate': ['angular'],
     'ui-bootstrap': ['angular'],
-    'ocLazyLoad': ['angular']
+    'ocLazyLoad': ['angular'],
+    'angular-qr': ['angular', 'qrcode']
   }
 });
 

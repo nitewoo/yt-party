@@ -1,0 +1,10 @@
+<div>
+  <div class="is-fixed">
+    <div class="pop-dialog has-transitions" ng-class="{'is-visible': t.isOpen}">
+      <div class="qr-code">qr-code</div>
+    </div>
+    <a class="btn btn-warning btn-lg pop-dialog-trigger" ng-class="{'menu-is-open': t.isOpen}" ng-click="click()">
+      <span class="glyphicon" ng-class="{'glyphicon-qrcode': !t.isOpen, 'glyphicon-remove': t.isOpen}"></span>
+    </a>
+  </div>
+</div>

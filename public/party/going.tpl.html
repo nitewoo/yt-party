@@ -1,0 +1,175 @@
+<div class="col-sm-12"  ng-if="!party.curMember">
+  <div class="input-group mb_20">
+    <span class="input-group-addon" id="basic-addon1">
+      <span class="glyphicon glyphicon-filter"></span>
+    </span>
+    <input type="text" class="form-control" ng-model="party.e.memberNameLaunched" ng-keyup="handleMemberLanchedKeyup($event)" placeholder="太多了不好找？搜搜看~ 花名多？呵呵~该死呗">
+    <span class="input-group-btn">
+      <button class="btn btn-default" ng-class="{'btn-primary': !party.membersView.length}" type="button" ng-click="addMemberAndSignUp(party.e.memberNameLaunched, true)" ng-disabled="party.membersView.length">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </span>
+  </div>
+  <div class="alert alert-info" ng-if="!party.membersView.length">T^T 被无情遗漏了~~ 直接敲回车自己加上呗</div>
+  <div class="row">
+    <div class="member col-md-2" ng-repeat="member in party.membersView">
+      <a ng-click="signUp(member)">{{member.name}}</a>
+    </div>
+  </div>
+</div>
+<div ng-if="party.curMember">
+  <div yt-scrollfix>
+    <div class="container fix">
+      <div class="row">
+        <div class="col-sm-8">
+          <legend>
+            <span>我是{{party.curMember.name}}</span>
+            <a class="pull-right" ng-click="signOff()" tooltip="换个人点单" tooltip-append-to-body="true" tooltip-placement="left"><span class="glyphicon glyphicon-th"></span></a>
+          </legend>
+          <div class="form-horizontal clearfix seach-menuitem">
+            <div class="col-sm-10 form-group has-feedback">
+              <input type="text" class="form-control" placeholder="search menu" ng-model="party.e.menuSearchText">
+              <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+            </div>
+            <div class="pull-right pr_5">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="party.e.showMin" ng-true-value="{{1}}" ng-false-value="{{0}}">只看大家点过的
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="shadow-bottom"></div>
+        </div>
+        <div class="col-sm-4">
+          <legend ng-if="!party.e.showOrderSum">
+            <span>{{party.curMember.name}}点了</span>
+            <a class="pull-right" ng-click="toggleShowOrderSum()" tooltip="大家点了什么？" tooltip-append-to-body="true" tooltip-placement="left">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </a>
+          </legend>
+          <legend ng-if="party.e.showOrderSum">
+            <span>大家点了</span>
+            <a class="pull-right" ng-click="toggleShowOrderSum()" tooltip="{{party.curMember.name}}点了什么？" tooltip-append-to-body="true" tooltip-placement="left">
+              <span class="glyphicon glyphicon-bookmark"></span>
+            </a>
+          </legend>
+        </div>
+      </div>
+    </div>
+    <div class="container fix order">
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-8" yt-max-height>
+          <div class="cur-order" ng-if="!party.e.showOrderSum">
+            <div class="alert alert-info" ng-if="!party.curMember.isOrdered">
+              <p>我还没点任何东西</p>
+            </div>
+            <div class="panel panel-default" ng-repeat="saler in party.curMember.salersView" ng-if="(saler.menu | menuOrdered).length">
+              <div class="panel-heading">
+                <span>{{saler.name}}</span>
+              </div>
+              <table class="table table-hover">
+                <tbody>
+                   <tr ng-repeat="item in saler.menu" ng-if="item.quantity"  tooltip="-1" tooltip-append-to-body="true" tooltip-placement="right" ng-click="decrease(item)">
+                    <td>
+                      <span>{{item.name}}</span>
+                    </td>
+                    <td class="text-right">
+                      <span class="glyphicon glyphicon-minus mr_5 text-danger"></span>
+                      <span>{{item.quantity}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div ng-if="party.e.showOrderSum">
+            <div class="alert alert-info">
+              <p><strong>(⊙_⊙) 谁没点？</strong></p>
+              <span ng-repeat="member in party.data.members | filter:{isOrdered: '!true', removed: '!true'}">
+                <span ng-if="$index">、</span>
+                <a tooltip="帮ta点" ng-click="signUp(member)">{{member.name}}</a>
+              </span>
+            </div>
+            <div class="panel panel-default" ng-repeat="saler in party.orderView" ng-if="(saler.menu | filter:ifHasOrder).length">
+              <div class="panel-heading">
+                {{saler.name}}
+              </div>
+              <table class="table">
+                <tbody>
+                  <tr ng-repeat="item in saler.menu" ng-if="item.total">
+                    <td>{{item.name}}</td>
+                    <td class="text-right">{{item.total}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <legend>
+            <span>我是{{party.curMember.name}}</span>
+            <a class="pull-right" ng-click="signOff()" tooltip="换个人点单" tooltip-append-to-body="true" tooltip-placement="left"><span class="glyphicon glyphicon-th"></span></a>
+          </legend>
+          <div class="form-horizontal clearfix">
+            <div class="col-sm-10 form-group has-feedback">
+              <input type="text" class="form-control" placeholder="search menu" ng-model="party.e.menuSearchText">
+              <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+            </div>
+            <div class="pull-right pr_5">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="party.e.showMin" ng-true-value="{{1}}" ng-false-value="{{0}}">只看大家点过的
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <legend ng-if="!party.e.showOrderSum">
+            <span>{{party.curMember.name}}点了</span>
+            <a class="pull-right" ng-click="toggleShowOrderSum()" tooltip="大家点了什么？" tooltip-append-to-body="true" tooltip-placement="left">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </a>
+          </legend>
+          <legend ng-if="party.e.showOrderSum">
+            <span>大家点了</span>
+            <a class="pull-right" ng-click="toggleShowOrderSum()" tooltip="{{party.curMember.name}}点了什么？" tooltip-append-to-body="true" tooltip-placement="left">
+              <span class="glyphicon glyphicon-bookmark"></span>
+            </a>
+          </legend>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <div ng-if="party.curMember">
+            <div class="panel panel-default panel-saler" ng-repeat="saler in party.salersView" ng-if="(saler.menu | searchMenuitem:party.e.menuSearchText:party.e.showMin).length">
+              <div class="panel-heading">{{saler.name}}</div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="menuitem col-md-6" ng-repeat="item in saler.menu | searchMenuitem:party.e.menuSearchText:party.e.showMin">
+                    <div class="wrap" ng-class="{'has-order': item.total}">
+                      <span>{{item.menuitem.name}}</span>
+                      <ul class="nav nav-pills" ng-repeat="group in item.menuitem.optGroups">
+                        <li ng-class="{'active':  group.selected.indexOf($index) > -1}" ng-repeat="opt in group.opts" ng-click="setOpt(group, $index)"><a>{{opt}}</a></li>
+                      </ul>
+                      <button class="btn btn-primary btn-sm text-right" ng-click="increase(item)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

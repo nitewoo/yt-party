@@ -1,0 +1,88 @@
+<div class="col-sm-4">
+  <div class="input-group mb_20">
+    <input type="text" class="form-control" placeholder="添加成员" ng-model="party.e.memberName" ng-keyup="handleMemberKeyup($event, party.e.memberName)">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" ng-click="addMember()"><span class="glyphicon glyphicon-plus"></span></button>
+    </span>
+  </div>
+  <div class="panel panel-default" ng-if="(party.data.members | filter: {removed: '!true'}).length">
+    <div class="panel-heading">Member</div>
+    <table class="table">
+      <tbody>
+        <tr ng-repeat="member in party.data.members | filter: {removed: '!true'}">
+          <td>{{member.name}}</td>
+          <td><a class="pull-right btn-remove" ng-click="removeMember(member)"><span class="glyphicon glyphicon-trash"></span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="col-sm-4">
+  <div class="form-group has-feedback mb_20">
+    <input type="text" class="form-control" placeholder="搜索店家" ng-model="party.e.saler" typeahead="saler as saler.name for saler in salerList | searchSaler:$viewValue" typeahead-on-select="onSalerSelect($item)">
+    <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+  </div>
+  <div class="panel panel-default panel-menu" ng-repeat="saler in party.salerListView" ng-if="saler.menu.length">
+    <div class="panel-heading">
+      <a class="btn btn-link btn-vague p_0" ng-click="toggleCollapsed(saler)">
+        <span class="glyphicon mr_5" ng-class="{'glyphicon glyphicon-folder-open': !saler.folded, 'glyphicon glyphicon-folder-close': saler.folded}"></span>
+      </a>
+      <span>{{saler.name}}</span>
+      <a class="btn btn-default btn-xs pull-right"  tooltip="添加全部菜品为备选项" tooltip-append-to-body="true" ng-click="addAllToMenu(saler.menu)"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+      <a class="btn btn-link btn-vague pull-right p_0 mr_10" tooltip="创建菜品" tooltip-append-to-body="true" ng-click="createMenuitem(saler)">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+    </div>
+    <div collapse="saler.folded">
+      <div class="panel-body">
+        <div class="form-group has-feedback mb_0">
+          <input type="text" class="form-control" placeholder="搜索菜品" ng-model="saler.searchText">
+          <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div>
+        <table class="table table-hover mb_0">
+          <tbody>
+            <tr ng-repeat="item in saler.menu | searchMenuitem:saler.searchText">
+              <td>
+                <a class="btn btn-link" ng-click="addToMenu(item)">
+                  <span class="glyphicon glyphicon-shopping-cart"></span>
+                  <span>{{item.name}}</span>
+                </a>
+                <a class="btn-vague pull-right" ng-click="maintainMenuitem(item)"><span class="glyphicon glyphicon-edit"></span></a>
+              </td>
+              <td>{{item.price | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-sm-4">
+  <div class="mb_20">
+    <button class="btn btn-primary w_100p" ng-click="launch()" ng-if="!party.data.launched" ng-disabled="!(party.data.menu | filter:{removed: '!true'}).length">启动</button>
+    <button class="btn btn-primary w_100p" ng-click="toggleMaintain()" ng-if="party.data.launched" ng-disabled="!(party.data.menu | filter:{removed: '!true'}).length">活动继续</button>
+  </div>
+  <div class="panel panel-default" ng-if="(party.data.menu | filter:{removed: '!true'}).length">
+    <div class="panel-heading">
+      <span>已选择的备选菜品</span>
+      <a class="btn btn-default btn-xs pull-right" ng-click="removeAllFromMenu()"><span tooltip="移除全部" class="glyphicon glyphicon-trash"></span></a>
+    </div>
+    <div class="panel-body">
+      <div class="form-group has-feedback mb_0">
+        <input type="text" class="form-control" placeholder="按店家搜索看看" ng-model="party.e.partyMenuSearchText">
+        <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <table class="table">
+      <tbody>
+        <!-- <tr ng-repeat="item in party.data.menu | filter:{removed: '!true'}" tooltip="{{item.menuitem.saler.name}}"> -->
+        <tr ng-repeat="item in party.data.menu | searchPartyMenuBySalerName: party.e.partyMenuSearchText" tooltip="{{item.menuitem.saler.name}}" tooltip-placement="left">
+          <td>{{item.menuitem.name}}</td>
+          <td class="pr_20"><a class="pull-right btn-remove" ng-click="removeFromMenu(item)"><span class="glyphicon glyphicon-trash"></span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

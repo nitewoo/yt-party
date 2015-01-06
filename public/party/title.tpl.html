@@ -1,0 +1,30 @@
+<div class="ptb_10 h_50">
+  <button class="btn btn-link btn-sm" ng-click="goHome()" ng-if="party.data._id">发起新活动</button>
+  <div class="pull-right" ng-if="party.data.launched">
+    <button class="btn btn-default btn-sm" ng-click="toggleMaintain()" ng-if="!party.e.maintaining" tooltip="维护 Title/菜单/参与人" tooltip-placement="bottom">
+      <span class="glyphicon glyphicon-list-alt"></span>
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div  ng-class="{'col-sm-8': party.data._id && !party.e.maintaining, 'col-sm-12': !(party.data._id && !party.e.maintaining)}">
+    <div class="jumbotron text-center min-h_200">
+      <h1>
+        <span ng-if="!party.data._id">no bullshit, let's have a party</span>
+        <span ng-if="party.data._id && !party.e.titleEditing || !party.e.maintaining">{{party.data.title}}</span>
+        <div class="input-group input-group-lg col-sm-8 col-sm-offset-2 text-center" ng-if="party.data._id && party.e.maintaining && party.e.titleEditing">
+          <input type="text" class="form-control" placeholder="input party title" ng-model="party.e.title" yt-focus-me="party.e.titleFocus">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-click="saveTitle(party.e.memberName)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+          </span>
+        </div>
+        <a href="" tooltip="编辑活动主题" ng-if="party.data._id && party.e.maintaining && !party.e.titleEditing" ng-click="editTitle()"><span class="glyphicon glyphicon-pencil"></span></a>
+      </h1>
+    </div>
+  </div>
+  <div class="col-sm-4" ng-if="party.data._id && !party.e.maintaining">
+    <div class="log-wrap clearfix min-h_200">
+      <p ng-repeat="log in party.orderLogView">{{log.msg}}</p>
+    </div>
+  </div>
+</div>

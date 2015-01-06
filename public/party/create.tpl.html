@@ -1,0 +1,14 @@
+<div class="col-sm-8 col-sm-offset-2 text-center">
+  <div class="form-group">
+    <input type="text" class="form-control input-lg text center"  ng-model="party.e.party" placeholder="input party title" typeahead="party as party.title for party in partyList | searchPartyTitle:$viewValue" typeahead-template-url="customTemplate.html">
+    <script type="text/ng-template" id="customTemplate.html">
+      <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        <span>&nbsp;&nbsp;@&nbsp;&nbsp;</span>
+        <span bind-html-unsafe="match.model.meta.createAt"></span>
+      </a>
+    </script>
+  </div>
+  <button type="button" class="btn btn-primary btn-lg" ng-click="create(true)" ng-disabled="!party.e.party._id">one more time</button>
+  <button type="button" class="btn btn-success btn-lg" ng-click="create()">new one</button>
+</div>

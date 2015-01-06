@@ -3,7 +3,13 @@ var mongoose = require('mongoose');
 var MenuitemSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  saler: { type: mongoose.Schema.Types.ObjectId, ref: 'Saler' }
+  saler: { type: mongoose.Schema.Types.ObjectId, ref: 'Saler' },
+  optGroups: [{
+    name: String,
+    required: Boolean,
+    multiple: Boolean,
+    opts: Array
+  }]
 }, { collection: 'Menuitem' });
 
 MenuitemSchema.statics = {

@@ -1,0 +1,16 @@
+<div class="col-sm-4">
+  <p class="mt_5 mb_5 text-center">{{party.data.title}}</p>
+  <div class="panel panel-default" ng-repeat="saler in party.orderView" ng-if="(saler.menu | filter:ifHasOrder).length">
+    <div class="panel-heading">
+      {{saler.name}}
+    </div>
+    <table class="table">
+      <tbody>
+        <tr ng-repeat="item in saler.menu" ng-if="item.total">
+          <td>{{item.name}}</td>
+          <td class="text-right">{{item.total}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
